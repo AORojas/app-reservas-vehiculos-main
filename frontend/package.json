@@ -40,8 +40,6 @@
     "@eslint/js": "^9.37.0",
     "@jridgewell/remapping": "^2.3.4",
     "@jridgewell/sourcemap-codec": "^1.5.4",
-    "@rollup/rollup-win32-x64-msvc": "^4.60.1",
-    "@tailwindcss/oxide-win32-x64-msvc": "^4.1.14",
     "@tailwindcss/vite": "^4.1.14",
     "@types/cors": "^2.8.19",
     "@types/js-cookie": "^3.0.6",
