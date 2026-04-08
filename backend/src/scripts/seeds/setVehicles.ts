@@ -1,8 +1,8 @@
 import {
   closeDatabaseConnection,
   openDatabaseConnection
-} from '../../models/mongodb/database'
-import VehicleModel from '../../models/mongodb/schemas/vehicle.model'
+} from '../../models/mongoDB/database'
+import VehicleModel from '../../models/mongoDB/schemas/vehicle.model'
 import vehiclesJSON from '../data/vehicles.json'
 
 openDatabaseConnection()

@@ -5,8 +5,12 @@ import userRoutes from './routes/user.routes'
 import reservationRoutes from './routes/reservation.routes'
 import { authMiddleware } from './middlewares/authMiddleware'
 import cookieParser from 'cookie-parser'
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
 
 const app = express()
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
+const vehicleAssetsPath = path.join(currentDirectory, 'assets', 'vehicles')
 
 const { FRONTEND_URL } = process.env
 
@@ -22,7 +26,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use('/vehicles', vehicleRoutes)
-app.use('/vehicles-images', express.static('./src/assets/vehicles/'))
+app.use('/vehicles-images', express.static(vehicleAssetsPath))
 app.use('/reservations', authMiddleware, reservationRoutes)
 app.use('/api', userRoutes)
 

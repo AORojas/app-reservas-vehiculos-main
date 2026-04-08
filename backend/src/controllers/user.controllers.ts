@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import UserModel from '../models/mongodb/schemas/user.model'
+import UserModel from '../models/mongoDB/schemas/user.model'
 import type { IUser, JwtPayloadCustom, UserProfileInfo } from '../types/types'
 import { createAccessToken } from '../utils/jwt'
 
@@ -214,7 +214,7 @@ export const verifyToken = async (
       return
     }
 
-    const userFounded = await UserModel.findById(decoded._id)
+    const userFounded = await UserModel.findById(decoded.userLoginInfo._id)
 
     if (userFounded === null) {
       res.status(401).json({ message: 'Error de autenticación' })

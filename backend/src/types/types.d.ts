@@ -102,6 +102,6 @@ export interface TokenPayload {
   full_name: string
 }
 
-interface JwtPayloadCustom extends jwt.JwtPayload {
+export interface JwtPayloadCustom extends jwt.JwtPayload {
   userLoginInfo: TokenPayload
 }

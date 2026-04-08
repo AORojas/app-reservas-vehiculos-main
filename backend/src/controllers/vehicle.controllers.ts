@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import VehicleModel from '../models/mongodb/schemas/vehicle.model'
+import VehicleModel from '../models/mongoDB/schemas/vehicle.model'
 import type { VehicleDetails } from '../types/types'
 import mongoose from 'mongoose'
 
