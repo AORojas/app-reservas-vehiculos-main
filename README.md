@@ -1,41 +1,126 @@
-## Readme
+# App Reservas Vehiculos
 
-En primer instancia es necesario tener instalado NVM (Node Versión Manager), el cual gestiona las diferentes versiones de Node. La versión que necesitamos para correr el proyecto será la última LTS.
+Aplicacion full stack orientada a la gestion de reservas de vehiculos. El proyecto integra una SPA desarrollada en React con una API REST en Express, autenticacion basada en JWT y persistencia de datos en MongoDB.
 
-Aclarado esto, debemos clonar el repositorio de github para tenerlo de forma local. Luego, abrir la carpeta del mismo y posicionarnos, ya sea en la parte de backend o frontend y ejecutar en consola `npm install`, para instalar todos los paquetes necesarios para que la aplicación funcione.
+## Overview
 
-Para iniciar el servidor del proyecto y realizar modificaciones ejecutar `npm run dev`, tanto en el backend, como en el frontend. Esto abrirá un servidor local para ver en tiempo real los cambios realizados.
+La aplicacion permite explorar la flota disponible, consultar el detalle de cada vehiculo, registrarse, autenticarse y generar reservas. La solucion fue planteada con una separacion clara entre frontend y backend, consumo de API desacoplado y persistencia de estado del lado del cliente para mejorar la experiencia de uso durante el flujo de reserva.
 
-### Frontend
+## Stack Tecnologico
 
-Para el frontend vamos a utilizar React con TypeScript, acompañando los estilos con Tailwindcss, y una librería de componentes para no tener que hacer todo desde cero.
+- Frontend: React 19, TypeScript, Vite, Tailwind CSS, React Router, Zustand, Radix UI
+- Backend: Node.js, TypeScript, Express 5, Mongoose
+- Base de datos: MongoDB
+- Integraciones: JWT, cookies HTTP, Cloudinary para assets externos
 
-La librería que vamos a utilizar es shadcdn (https://ui.shadcn.com/).
+## Funcionalidades Principales
 
-Cómo la aplicación va a tener diferentes links, vamos a necesitar utilizar react-router para gestionar las diferentes url's.
+- Visualizacion de flota con filtros por criterios de negocio
+- Vista de detalle por vehiculo
+- Registro e inicio de sesion de usuarios
+- Validacion de sesion y rutas protegidas
+- Edicion de perfil autenticado
+- Generacion de reservas persistidas en base de datos
+- Seed inicial de vehiculos para poblar el entorno de desarrollo
+
+## Arquitectura
+
+```text
+.
+|-- backend
+`-- frontend
+```
+
+- `frontend`: SPA en React con enrutado del lado del cliente, manejo de estado y consumo de API
+- `backend`: API REST con Express, middlewares de autenticacion, acceso a MongoDB mediante Mongoose y exposicion de assets estaticos
+
+## Variables de Entorno
+
+El backend utiliza la siguiente configuracion:
+
+```env
+PORT=3000
+FRONTEND_URL=http://localhost:5173
+JWT_SECRET=dev_secret_change_me
+MONGODB_HOST=mongodb://127.0.0.1:27017/
+MONGODB_DATABASE_NAME=app_reservas_vehiculos
+```
+
+## Instalacion y Ejecucion
+
+### Requisitos
+
+- Node.js LTS
+- npm
+- MongoDB corriendo en local
 
 ### Backend
 
-En el lado del backend utilizaremos Node junto con TypeScript. Para el desarrollo de la API utilizaremos Express y Mongoose, que es el ODM para realizar la gestión de la base de datos MongoDB.
+```bash
+cd backend
+npm install
+npm run dev
+```
 
-## Clonar el repositorio
+### Seed de datos
 
-Clonar el repositorio:
+```bash
+cd backend
+npm run seed-vehicles
+```
 
-- Descargarlo presionando en la parte superior donde dice `< > Code` y `Download ZIP`.
-- Si ya han configurado el SSH de de GitHub, simplemente posicionarse en una carpeta de su equipo, abrir la terminal en esa misma carpeta, y copiar y pegar el comando de SSH que aparece en `< > Code`. Eso clona el repositorio directamente.
+### Frontend
 
-**Aclaración**: Si o si, para poder trabajar en el repositorio, GitHub les va a pedir que configuren el SSH. En YouTube hay un montón de tutoriales, o pueden buscarlo en la misma documentación de GitHub.
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-### Tecnologías, extensiones, librerías
+## Scripts
 
-Extensiones útiles de VS-Code:
+### Backend
 
-- **Thunder Client**: Esta extensión te permite hacer consultas básicas a una API. Obviamente pueden utilizar Postman o cualquier otra herramienta que sirva para esa finalidad, pero si no quieren hacerse tanto lio instalando un programa a parte, Thunder Client es básica y fácil de usar.
-- **Tailwind CSS IntelliSense**: Esta extensión agrega un autocompletado a las clases de tailwind para programar más rápido y comodo. Para aquellos que vayan a utilizar tailwind, pueden consultar en la página ([link](https://tailwindcss.com/)) las diferentes clases que sustituyen las de CSS tradicional.
-- **Prettier**: Este plugin te ayuda a formatear el código para que quede bien identado, con los espacios correctos, incluso acomodar las clases de tailwind para que sea más fácil su lectura.
+- `npm run dev`: inicia el servidor en desarrollo con recarga
+- `npm run seed-vehicles`: inserta la flota inicial en MongoDB
 
-Tecnologías utilizadas en el proyecto:
+### Frontend
 
-- Frontend: React, TypeScript, Tailwind, librería de componentes shadcdn.
-- Backend: Node (v22.18.0), TypeScript, MongoDB (pueden instalar MongoDBCompass para tener una interfaz con la cual interactuar sobre la base de datos de MongoDB).
+- `npm run dev`: inicia el entorno de desarrollo con Vite
+- `npm run build`: genera la build de produccion
+- `npm run lint`: ejecuta validaciones con ESLint
+- `npm run preview`: previsualiza la build generada
+
+## Rutas Relevantes
+
+### Frontend
+
+- `/inicio`
+- `/flota-vehiculos`
+- `/vehiculo/:id`
+- `/generar-reserva`
+- `/register`
+- `/perfil`
+
+### Backend
+
+- `GET /vehicles`
+- `GET /vehicles/:id`
+- `POST /api/register`
+- `POST /api/login`
+- `PUT /api/update`
+- `GET /api/user/:id`
+- `GET /api/verify`
+- `POST /reservations`
+
+## Aspectos Tecnicos Destacados
+
+- Separacion clara entre capa de presentacion, capa de acceso a datos y capa de API
+- Proteccion de endpoints y rutas privadas mediante JWT y middleware de autenticacion
+- Persistencia de informacion de reserva en cliente para sostener el flujo de usuario
+- Seed de datos para inicializacion rapida del entorno
+- Servido de imagenes estaticas desde backend y soporte de assets externos para enriquecer la UI
+
+## Estado del Proyecto
+
+El repositorio refleja un entorno funcional de desarrollo con frontend y backend desacoplados, autenticacion operativa, persistencia en MongoDB y flujo completo de consulta y reserva de vehiculos.
