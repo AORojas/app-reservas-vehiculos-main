@@ -1,8 +1,8 @@
 import { type Response } from 'express'
-import type { AuthenticatedRequest } from '../middlewares/authMiddleware'
-import UserModel from '../models/mongoDB/schemas/user.model'
-import VehicleModel from '../models/mongoDB/schemas/vehicle.model'
-import ReservationModel from '../models/mongoDB/schemas/reservation.model'
+import type { AuthenticatedRequest } from '../middlewares/authMiddleware.js'
+import UserModel from '../models/mongoDB/schemas/user.model.js'
+import VehicleModel from '../models/mongoDB/schemas/vehicle.model.js'
+import ReservationModel from '../models/mongoDB/schemas/reservation.model.js'
 import type { ReservationResponse } from '../types/types'
 
 export const setReservation = async (

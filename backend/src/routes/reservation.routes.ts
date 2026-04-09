@@ -1,5 +1,5 @@
 import express from 'express'
-import { setReservation } from '../controllers/reservation.controllers'
+import { setReservation } from '../controllers/reservation.controllers.js'
 
 const router = express.Router()
 

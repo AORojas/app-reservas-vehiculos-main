@@ -5,8 +5,8 @@ import {
   updateUser,
   verifyToken,
   getUserProfile
-} from '../controllers/user.controllers'
-import { authMiddleware } from '../middlewares/authMiddleware'
+} from '../controllers/user.controllers.js'
+import { authMiddleware } from '../middlewares/authMiddleware.js'
 
 const router = Router()
 

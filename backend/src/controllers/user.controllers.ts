@@ -1,9 +1,9 @@
 import { type Request, type Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import UserModel from '../models/mongoDB/schemas/user.model'
+import UserModel from '../models/mongoDB/schemas/user.model.js'
 import type { IUser, JwtPayloadCustom, UserProfileInfo } from '../types/types'
-import { createAccessToken } from '../utils/jwt'
+import { createAccessToken } from '../utils/jwt.js'
 
 export const registerUser = async (
   req: Request,

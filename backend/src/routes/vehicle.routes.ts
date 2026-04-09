@@ -2,7 +2,7 @@ import { Router } from 'express'
 import {
   getVehicleDetails,
   getVehicles
-} from '../controllers/vehicle.controllers'
+} from '../controllers/vehicle.controllers.js'
 
 const router = Router()
 
