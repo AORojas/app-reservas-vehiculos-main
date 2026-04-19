@@ -16,7 +16,8 @@ export const openDatabaseConnection = async (): Promise<void> => {
     await mongoose.connect(databaseUri)
     console.log('DB is connected')
   } catch (err) {
-    console.log('Error connecting to the database: ', err)
+    console.error('Error connecting to the database: ', err)
+    throw err
   }
 }
 

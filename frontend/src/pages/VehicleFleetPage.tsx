@@ -16,7 +16,7 @@ const VehicleFleetPage: React.FC = () => {
   const [seatingCapacity, setCapacityFilter] = useState('')
   const [maxPriceFilter, setMaxPriceFilter] = useState('')
 
-  const { vehicles } = useVehicles()
+  const { vehicles, loading, error } = useVehicles()
   const { user } = useAuthContext()
 
   // Aplica filtros dinámicamente
@@ -127,7 +127,15 @@ const VehicleFleetPage: React.FC = () => {
 
       {/* Lista filtrada */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredVehicles.length > 0 ? (
+        {loading ? (
+          <p className="col-span-full text-center text-xl">
+            Cargando vehiculos...
+          </p>
+        ) : error ? (
+          <p className="col-span-full text-center text-xl text-red-600">
+            Error al cargar los vehiculos: {error}
+          </p>
+        ) : filteredVehicles.length > 0 ? (
           filteredVehicles.map((vehicle) => (
             <div
               key={vehicle._id}

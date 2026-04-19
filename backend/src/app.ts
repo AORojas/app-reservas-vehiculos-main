@@ -13,9 +13,25 @@ const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
 const vehicleAssetsPath = path.join(currentDirectory, 'assets', 'vehicles')
 
 const { FRONTEND_URL } = process.env
+const allowedOrigins = new Set(
+  [FRONTEND_URL].filter((origin): origin is string => Boolean(origin))
+)
 
-const corsOptions = {
-  origin: [`${FRONTEND_URL}`],
+const localOriginPattern = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/
+
+const corsOptions: cors.CorsOptions = {
+  origin(origin, callback) {
+    if (
+      origin === undefined ||
+      allowedOrigins.has(origin) ||
+      localOriginPattern.test(origin)
+    ) {
+      callback(null, true)
+      return
+    }
+
+    callback(new Error(`Origin not allowed by CORS: ${origin}`))
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }

@@ -6,7 +6,7 @@ import CarouselVehicles from '@/components/home/CarouselVehicles'
 import HomePageFormReservation from '@/components/home/HomePageFormReservation'
 
 const HomePage = (): JSX.Element => {
-  const { vehicles } = useVehicle()
+  const { vehicles, loading, error } = useVehicle()
 
   return (
     <>
@@ -19,13 +19,23 @@ const HomePage = (): JSX.Element => {
         <HomePageFormReservation />
       </section>
       <section className="relative flex flex-col items-center justify-between gap-6 pt-6 pb-16">
-        {vehicles === null || vehicles.length === 0 ? (
+        {loading ? (
           <div className="mt-4 flex h-52 w-1/3 items-center justify-center rounded-md bg-amber-800/80">
-            <p className="text-3xl text-white">No hay vehículos disponibles</p>
+            <p className="text-3xl text-white">Cargando vehiculos...</p>
+          </div>
+        ) : error ? (
+          <div className="mt-4 flex h-52 w-1/3 items-center justify-center rounded-md bg-red-700/80 p-6">
+            <p className="text-center text-xl text-white">
+              Error al cargar los vehiculos: {error}
+            </p>
+          </div>
+        ) : vehicles === null || vehicles.length === 0 ? (
+          <div className="mt-4 flex h-52 w-1/3 items-center justify-center rounded-md bg-amber-800/80">
+            <p className="text-3xl text-white">No hay vehiculos disponibles</p>
           </div>
         ) : (
           <>
-            <h2 className="text-5xl">Nuestra flota de alquiler de vehículos</h2>
+            <h2 className="text-5xl">Nuestra flota de alquiler de vehiculos</h2>
             <CarouselVehicles vehicles={vehicles} />
           </>
         )}
