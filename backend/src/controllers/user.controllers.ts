@@ -1,9 +1,19 @@
-import { type Request, type Response } from 'express'
+import { type CookieOptions, type Request, type Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import UserModel from '../models/mongoDB/schemas/user.model.js'
 import type { IUser, JwtPayloadCustom, UserProfileInfo } from '../types/types'
 import { createAccessToken } from '../utils/jwt.js'
+
+const isProductionCookie = process.env.FRONTEND_URL?.startsWith('https://')
+
+const authCookieOptions: CookieOptions = {
+  httpOnly: true,
+  sameSite: isProductionCookie ? 'none' : 'lax',
+  secure: Boolean(isProductionCookie),
+  maxAge: 1000 * 60 * 60,
+  path: '/'
+}
 
 export const registerUser = async (
   req: Request,
@@ -43,7 +53,7 @@ export const registerUser = async (
 
     const existingUser = await UserModel.findOne({ email })
     if (existingUser) {
-      res.status(400).json({ message: 'El correo ya está registrado' })
+      res.status(400).json({ message: 'El correo ya esta registrado' })
       return
     }
 
@@ -71,7 +81,7 @@ export const registerUser = async (
       full_name: userObj.full_name
     })
 
-    res.cookie('token', token)
+    res.cookie('token', token, authCookieOptions)
 
     res.status(201).json({
       message: 'Usuario creado correctamente',
@@ -117,7 +127,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     const token = await createAccessToken(userLoginInfo)
 
-    res.cookie('token', token)
+    res.cookie('token', token, authCookieOptions)
 
     res.status(200).json({
       message: 'Login exitoso',
@@ -143,16 +153,15 @@ export const updateUser = async (
       return
     }
 
-    // Cambio de contraseña
     if (new_password) {
       if (!current_password) {
-        res.status(400).json({ message: 'Debe ingresar la contraseña actual' })
+        res.status(400).json({ message: 'Debe ingresar la contrasena actual' })
         return
       }
 
       const isMatch = await bcrypt.compare(current_password, user.password)
       if (!isMatch) {
-        res.status(401).json({ message: 'Contraseña actual incorrecta' })
+        res.status(401).json({ message: 'Contrasena actual incorrecta' })
         return
       }
 
@@ -202,7 +211,7 @@ export const verifyToken = async (
   const { JWT_SECRET } = process.env
 
   if (!JWT_SECRET) {
-    res.status(500).json({ message: 'Error de autenticación' })
+    res.status(500).json({ message: 'Error de autenticacion' })
     return
   }
 
@@ -210,19 +219,19 @@ export const verifyToken = async (
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayloadCustom
 
     if (!decoded) {
-      res.status(404).json({ message: 'Error de autenticación' })
+      res.status(404).json({ message: 'Error de autenticacion' })
       return
     }
 
     const userFounded = await UserModel.findById(decoded.userLoginInfo._id)
 
     if (userFounded === null) {
-      res.status(401).json({ message: 'Error de autenticación' })
+      res.status(401).json({ message: 'Error de autenticacion' })
       return
     }
 
     res.status(200).json({
-      message: 'Autenticación exitosa',
+      message: 'Autenticacion exitosa',
       userLoginInfo: {
         _id: userFounded._id,
         full_name: userFounded.full_name,
@@ -231,11 +240,18 @@ export const verifyToken = async (
     })
   } catch (err) {
     if (err instanceof Error) {
-      console.error('Error de autenticación: ', err.message)
+      console.error('Error de autenticacion: ', err.message)
     } else {
       console.error('Ha ocurrido un error desconocido.')
     }
+
+    res.status(401).json({ message: 'Error de autenticacion' })
   }
+}
+
+export const logoutUser = (_req: Request, res: Response): void => {
+  res.clearCookie('token', authCookieOptions)
+  res.status(200).json({ message: 'Logout exitoso' })
 }
 
 export const getUserProfile = async (
@@ -283,7 +299,7 @@ export const getUserProfile = async (
       })
     } else {
       res.status(404).json({
-        message: `Error desconcido al obtener el perfil del usuario`
+        message: 'Error desconocido al obtener el perfil del usuario'
       })
     }
   }

@@ -21,7 +21,9 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
   const handleOpenCloseMenu = (): void => setMenuIsOpen(!isMenuOpen)
 
-  const handleLogout = (): void => logout()
+  const handleLogout = (): void => {
+    void logout()
+  }
 
   const handleClickRegister = (): void => {
     navigate('/register')

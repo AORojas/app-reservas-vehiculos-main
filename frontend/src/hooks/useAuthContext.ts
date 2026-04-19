@@ -10,7 +10,7 @@ export interface AuthContextProps {
   user: UserLoginInfo | null
   signUp: (signiInUser: IUserInput) => Promise<void>
   signIn: (email: EmailType, password: PasswordType) => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
   authIsLoading: boolean
   isAuthenticated: boolean
   error: string

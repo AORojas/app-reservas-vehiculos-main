@@ -1,4 +1,9 @@
-import { loginUser, registerUser, verifyTokenRequest } from '@/api/userApi'
+import {
+  loginUser,
+  logoutUser,
+  registerUser,
+  verifyTokenRequest
+} from '@/api/userApi'
 import { AuthContext, type AuthContextProps } from '@/hooks/useAuthContext'
 import type {
   EmailType,
@@ -7,7 +12,6 @@ import type {
   UserLoginInfo
 } from '@/types/types'
 import { useEffect, useState, type JSX, type ReactNode } from 'react'
-import Cookies from 'js-cookie'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -20,20 +24,25 @@ const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   const [authIsLoading, setAuthIsLoading] = useState(true)
 
   const handleAuthSuccess = (userLoginInfo: UserLoginInfo | null): void => {
+    setError('')
     setUser(userLoginInfo)
     setIsAuthenticated(true)
+  }
+
+  const resetAuthState = (): void => {
+    setIsAuthenticated(false)
+    setUser(null)
   }
 
   const signUp = async (signInUser: IUserInput): Promise<void> => {
     try {
       const res = await registerUser(signInUser)
-
       handleAuthSuccess(res.userLoginInfo)
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        console.log('Error desconocido')
+        setError('Error desconocido')
       }
     }
   }
@@ -44,43 +53,48 @@ const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   ): Promise<void> => {
     try {
       const res = await loginUser(email, password)
-
       handleAuthSuccess(res.userLoginInfo)
     } catch (err) {
-      console.log(err)
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('Error desconocido')
+      }
     }
   }
 
-  const resetAuthState = (): void => {
-    Cookies.remove('token')
-    setIsAuthenticated(false)
-    setUser(null)
+  const logout = async (): Promise<void> => {
+    try {
+      await logoutUser()
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log('Error al cerrar sesion:', err.message)
+      } else {
+        console.log('Error desconocido al cerrar sesion')
+      }
+    } finally {
+      resetAuthState()
+    }
   }
-
-  const logout = (): void => resetAuthState()
 
   useEffect(() => {
     async function checkLogin(): Promise<void> {
-      const cookies = Cookies.get()
-
-      if (cookies.token === undefined) {
-        resetAuthState()
-        setAuthIsLoading(false)
-        return
-      }
-
       try {
         const res = await verifyTokenRequest()
-
         const userLoginInfo = res.userLoginInfo
 
-        if (userLoginInfo) handleAuthSuccess(userLoginInfo)
+        if (userLoginInfo) {
+          handleAuthSuccess(userLoginInfo)
+        } else {
+          resetAuthState()
+        }
       } catch (err) {
-        if (err instanceof Error)
+        if (err instanceof Error) {
           console.log(
-            'Ha ocurrido un error al intentar autenticar el usuario: ',
+            'Ha ocurrido un error al intentar autenticar el usuario:',
             err.message
           )
+        }
 
         resetAuthState()
       } finally {
