@@ -5,6 +5,11 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_API_URL': JSON.stringify(
+      process.env.VITE_API_URL || 'https://app-reservas-vehiculos-main.onrender.com'
+    )
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
