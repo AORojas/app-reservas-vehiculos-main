@@ -42,8 +42,11 @@ El backend utiliza la siguiente configuracion:
 PORT=3000
 FRONTEND_URL=http://localhost:5173
 JWT_SECRET=dev_secret_change_me
+# En desarrollo puedes usar MONGODB_HOST + MONGODB_DATABASE_NAME
 MONGODB_HOST=mongodb://127.0.0.1:27017/
 MONGODB_DATABASE_NAME=app_reservas_vehiculos
+# En deploy con Render usa MONGO_URL
+# MONGO_URL=mongodb+srv://<user>:<password>@cluster0.xxxx.mongodb.net/app_reservas_vehiculos?retryWrites=true&w=majority&appName=Cluster0
 ```
 
 ## Instalacion y Ejecucion

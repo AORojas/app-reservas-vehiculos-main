@@ -18,13 +18,15 @@ const allowedOrigins = new Set(
 )
 
 const localOriginPattern = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/
+const productionOriginPattern = /^https:\/\/.+$/
 
 const corsOptions: cors.CorsOptions = {
   origin(origin, callback) {
     if (
       origin === undefined ||
       allowedOrigins.has(origin) ||
-      localOriginPattern.test(origin)
+      localOriginPattern.test(origin) ||
+      (process.env.NODE_ENV === 'production' && productionOriginPattern.test(origin))
     ) {
       callback(null, true)
       return
