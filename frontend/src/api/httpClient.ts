@@ -1,4 +1,12 @@
-const BASE_URL = import.meta.env.VITE_API_URL
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://app-reservas-vehiculos-main.onrender.com'
+
+if (!BASE_URL) {
+  throw new Error(
+    'VITE_API_URL no está definido. Configura la URL de tu backend en las variables de entorno de Vercel.'
+  )
+}
+
+console.log('API Base URL:', BASE_URL)
 
 export interface HttpClientConfig extends RequestInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
